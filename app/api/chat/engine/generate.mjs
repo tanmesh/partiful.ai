@@ -3,7 +3,10 @@ import {
   SimpleDirectoryReader,
   storageContextFromDefaults,
   VectorStoreIndex,
+  Document
 } from "llamaindex";
+import fs from "fs";
+import path from 'path';
 
 import * as dotenv from "dotenv";
 
@@ -16,6 +19,32 @@ import {
 
 // Load environment variables from local .env file
 dotenv.config();
+
+async function readFiles() {
+  const folderPath = STORAGE_DIR;
+
+  let documents = [];
+
+  try {
+    const files = await fs.promises.readdir(folderPath);
+
+    for (const file of files) {
+      const filePath = path.join(folderPath, file);
+      const fileContent = JSON.parse(await fs.promises.readFile(filePath, 'utf-8'));
+
+      let document = new Document();
+      document.text = fileContent['text'];
+      document.metadata = {
+        "url": fileContent['link']
+      };
+      documents.push(document);
+    }
+    return documents;
+  } catch (err) {
+    console.error('Error reading folder:', err);
+    return [];
+  }
+}
 
 async function getRuntime(func) {
   const start = Date.now();
@@ -31,8 +60,14 @@ async function generateDatasource(serviceContext) {
     const storageContext = await storageContextFromDefaults({
       persistDir: STORAGE_CACHE_DIR,
     });
-    const documents = await new SimpleDirectoryReader().loadData({
-      directoryPath: STORAGE_DIR,
+    // const documents = await new SimpleDirectoryReader().loadData({
+    //   directoryPath: STORAGE_DIR,
+    // });
+
+    let documents = [];
+
+    await readFiles().then((documents_) => {
+      documents = documents_;
     });
     await VectorStoreIndex.fromDocuments(documents, {
       storageContext,

@@ -14,6 +14,14 @@ const nextConfig = {
       "/*": ["./cache/**/*"],
     },
   },
+  module: {
+    rules: [
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack', 'url-loader'],
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

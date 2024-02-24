@@ -1,0 +1,279 @@
+Welcome to LlamaIndex 🦙 !
+LlamaIndex is a data framework for LLM-based applications which benefit from context augmentation. Such LLM systems have been termed as RAG systems, standing for “Retrieval-Augemented Generation”. LlamaIndex provides the essential abstractions to more easily ingest, structure, and access private or domain-specific data in order to inject these safely and reliably into LLMs for more accurate text generation. It’s available in Python (these docs) and Typescript.
+
+Tip
+
+Updating to LlamaIndex v0.10.0? Check out the migration guide.
+
+🚀 Why Context Augmentation?
+LLMs offer a natural language interface between humans and data. Widely available models come pre-trained on huge amounts of publicly available data like Wikipedia, mailing lists, textbooks, source code and more.
+
+However, while LLMs are trained on a great deal of data, they are not trained on your data, which may be private or specific to the problem you’re trying to solve. It’s behind APIs, in SQL databases, or trapped in PDFs and slide decks.
+
+You may choose to fine-tune a LLM with your data, but:
+
+Training a LLM is expensive.
+
+Due to the cost to train, it’s hard to update a LLM with latest information.
+
+Observability is lacking. When you ask a LLM a question, it’s not obvious how the LLM arrived at its answer.
+
+Instead of fine-tuning, one can a context augmentation pattern called Retrieval-Augmented Generation (RAG) to obtain more accurate text generation relevant to your specific data. RAG involves the following high level steps:
+
+Retrieve information from your data sources first,
+
+Add it to your question as context, and
+
+Ask the LLM to answer based on the enriched prompt.
+
+In doing so, RAG overcomes all three weaknesses of the fine-tuning approach:
+
+There’s no training involved, so it’s cheap.
+
+Data is fetched only when you ask for them, so it’s always up to date.
+
+LlamaIndex can show you the retrieved documents, so it’s more trustworthy.
+
+🦙 Why LlamaIndex for Context Augmentation?
+Firstly, LlamaIndex imposes no restriction on how you use LLMs. You can still use LLMs as auto-complete, chatbots, semi-autonomous agents, and more (see Use Cases on the left). It only makes LLMs more relevant to you.
+
+LlamaIndex provides the following tools to help you quickly standup production-ready RAG systems:
+
+Data connectors ingest your existing data from their native source and format. These could be APIs, PDFs, SQL, and (much) more.
+
+Data indexes structure your data in intermediate representations that are easy and performant for LLMs to consume.
+
+Engines provide natural language access to your data. For example:
+
+Query engines are powerful retrieval interfaces for knowledge-augmented output.
+
+Chat engines are conversational interfaces for multi-message, “back and forth” interactions with your data.
+
+Data agents are LLM-powered knowledge workers augmented by tools, from simple helper functions to API integrations and more.
+
+Application integrations tie LlamaIndex back into the rest of your ecosystem. This could be LangChain, Flask, Docker, ChatGPT, or… anything else!
+
+👨‍👩‍👧‍👦 Who is LlamaIndex for?
+LlamaIndex provides tools for beginners, advanced users, and everyone in between.
+
+Our high-level API allows beginner users to use LlamaIndex to ingest and query their data in 5 lines of code.
+
+For more complex applications, our lower-level APIs allow advanced users to customize and extend any module—data connectors, indices, retrievers, query engines, reranking modules—to fit their needs.
+
+Getting Started
+To install the library:
+
+pip install llama-index
+
+We recommend starting at how to read these docs, which will point you to the right place based on your experience level.
+
+🗺️ Ecosystem
+To download or contribute, find LlamaIndex on:
+
+Github: https://github.com/jerryjliu/llama_index
+
+PyPi:
+
+LlamaIndex: https://pypi.org/project/llama-index/.
+
+GPT Index (duplicate): https://pypi.org/project/gpt-index/.
+
+NPM (Typescript/Javascript):
+Github: https://github.com/run-llama/LlamaIndexTS
+
+Docs: https://ts.llamaindex.ai/
+
+LlamaIndex.TS: https://www.npmjs.com/package/llamaindex
+
+Community
+Need help? Have a feature suggestion? Join the LlamaIndex community:
+
+Twitter: https://twitter.com/llama_index
+
+Discord https://discord.gg/dGcwcsnxhU
+
+Associated projects
+🏡 LlamaHub: https://llamahub.ai | A large (and growing!) collection of custom data connectors
+
+🧪 LlamaLab: https://github.com/run-llama/llama-lab | Ambitious projects built on top of LlamaIndex
+
+Installation and Setup
+The LlamaIndex ecosystem is structured using a collection of namespaced packages.
+
+What this means for users is that LlamaIndex comes with a core starter bundle, and additional integrations can be installed as needed.
+
+A complete list of packages and available integrations is available in our temporary registry, which will be moving to LlamaHub soon!
+
+Quickstart Installation from Pip
+To get started quickly, you can install with:
+
+pip install llama-index
+This is a starter bundle of packages, containing
+
+llama-index-core
+
+llama-index-legacy  # temporarily included
+
+llama-index-llms-openai
+
+llama-index-embeddings-openai
+
+llama-index-program-openai
+
+llama-index-question-gen-openai
+
+llama-index-agent-openai
+
+llama-index-readers-file
+
+llama-index-multi-modal-llms-openai
+
+NOTE: LlamaIndex may download and store local files for various packages (NLTK, HuggingFace, …). Use the environment variable “LLAMA_INDEX_CACHE_DIR” to control where these files are saved.
+
+Important: OpenAI Environment Setup
+By default, we use the OpenAI gpt-3.5-turbo model for text generation and text-embedding-ada-002 for retrieval and embeddings. In order to use this, you must have an OPENAI_API_KEY set up as an environment variable. You can obtain an API key by logging into your OpenAI account and and creating a new API key.
+
+Tip
+
+You can also use one of many other available LLMs. You may need additional environment keys + tokens setup depending on the LLM provider.
+
+Check out our OpenAI Starter Example
+
+Custom Installation from Pip
+If you aren’t using OpenAI, or want a more selective installation, you can install individual packages as needed.
+
+For example, for a local setup with Ollama and HuggingFace embeddings, the installation might look like:
+
+pip install llama-index-core llama-index-readers-file llama-index-llms-ollama llama-index-embeddings-huggingface
+Check out our Starter Example with Local Models
+
+A full guide to using and configuring LLMs is available here.
+
+A full guide to using and configuring embedding models is available here.
+
+Installation from Source
+Git clone this repository: git clone https://github.com/jerryjliu/llama_index.git. Then do the following:
+
+Install poetry - this will help you manage package dependencies
+
+poetry shell - this command creates a virtual environment, which keeps installed packages contained to this project
+
+poetry install - this will install the core starter package requirements
+
+(Optional) poetry install --with dev, docs - this will install all dependencies needed for most local development
+
+From there, you can install integrations as needed with pip, For example:
+
+Large Language Models
+FAQ
+How to use a custom/local embedding model?
+
+How to use a local hugging face embedding model?
+
+How can I customize my prompt
+
+Is it required to fine-tune my model?
+
+I want to the LLM answer in Chinese/Italian/French but only answers in English, how to proceed?
+
+Is LlamaIndex GPU accelerated?
+
+1. How to define a custom LLM?
+You can access Usage Custom to define a custom LLM.
+
+2. How to use a different OpenAI model?
+To use a different OpenAI model you can access Configure Model to set your own custom model.
+
+3. How can I customize my prompt?
+You can access Prompts to learn how to customize your prompts.
+
+4. Is it required to fine-tune my model?
+No. there’s isolated modules which might provide better results, but isn’t required, you can use llamaindex without needing to fine-tune the model.
+
+5. I want to the LLM answer in Chinese/Italian/French but only answers in English, how to proceed?
+To the LLM answer in another language more accurate you can update the prompts to enforce more the output language.
+
+response = query_engine.query("Rest of your query... \nRespond in Italian")
+Alternatively:
+
+from llama_index.core import Settings
+from llama_index.llms.openai import OpenAI
+
+llm = OpenAI(system_prompt="Always respond in Italian.")
+
+# set a global llm
+Settings.llm = llm
+
+query_engine = load_index_from_storage(
+    storage_context,
+).as_query_engine()
+6. Is LlamaIndex GPU accelerated?
+Yes, you can run a language model (LLM) on a GPU when running it locally. You can find an example of setting up LLMs with GPU support in the llama2 setup documentation.
+
+
+Embeddings
+FAQ
+How to use a custom/local embedding model?
+
+How to use a local hugging face embedding model?
+
+How to use embedding model to generate embeddings for text?
+
+How to use Huggingface Text-Embedding Inference with LlamaIndex?
+
+1. How to use a custom/local embedding model?
+To create your customized embedding class you can follow Custom Embeddings guide.
+
+2. How to use a local hugging face embedding model?
+To use a local HuggingFace embedding model you can follow Local Embeddings with HuggingFace guide.
+
+3. How to use embedding model to generate embeddings for text?
+You can generate embeddings for texts with the following piece of code.
+
+text_embedding = embed_model.get_text_embedding("YOUR_TEXT")
+4. How to use Huggingface Text-Embedding Inference with LlamaIndex?
+To use HuggingFace Text-Embedding Inference you can follow Text-Embedding-Inference tutorial.
+
+Vector Database
+FAQ
+Do I need to use a vector database?
+
+What’s the difference between the vector databases?
+
+1. Do I need to use a vector database?
+LlamaIndex provides a in-memory vector database allowing you to run it locally, when you have a large amount of documents vector databases provides more features and better scalability and less memory constraints depending of your hardware.
+
+2. What’s the difference between the vector databases?
+To check the difference between the vector databases, you can check at Vector Store Options & Feature Support.
+
+
+Chat Engines
+FAQ
+How to make bot retain context while answering, Can I do that with LlamaIndex?
+
+How to use Data Agent with Chat engine?
+
+1. How to make bot retain context while answering, Can I do that with LlamaIndex?
+Yes you can, Llamaindex provides chat engines that you can use to retain context and answer as per the context. You can find more here Chat Engines.
+
+2. How to use Data Agent with Chat engine?
+To use data Agents with Chat engine you have to set the chat mode while initializing the chat engine. Find more here Data Agents with Chat Engine
+
+Documents and Nodes
+FAQ
+What is the default chunk_size of a Node object?
+
+How to add information like name, url in a Document object?
+
+How to update existing document in an Index?
+
+1. What is the default chunk_size of a Node object?
+It’s 1024 by default. If you want to customize the chunk_size, You can follow Customizing Node
+
+2. How to add information like name, url in a Document object?
+You can customize the Document object and add extra info in the form of metadata. To know more on this follow Customize Document.
+
+3. How to update existing document in an Index?
+You can update/delete existing document in an Index with the help of doc_id. You can add new document to an existing Index too. To know more check Document Management
+
+

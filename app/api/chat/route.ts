@@ -26,6 +26,47 @@ const convertMessageContent = (
   ];
 };
 
+const fireworks = async (message: string) => {
+  let response = await fetch('https://api.fireworks.ai/inference/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Accept': "application/json",
+      'Content-Type': "application/json",
+      'Authorization': `Bearer ${process.env.FIREWORKS_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: "accounts/fireworks/models/firefunction-v1",
+      max_tokens: 4096,
+      top_p: 1,
+      top_k: 40,
+      presence_penalty: 0,
+      frequency_penalty: 0,
+      temperature: 0.6,
+      messages: [
+        {
+          content: message,
+          role: "user"
+        }
+      ],
+      tools: [
+        {
+          type: "function",
+          function: {
+            name: "summarizer",
+            description: "Summarize the input text into asking more relevant questions",
+            parameters: {
+            }
+          }
+        }
+      ]
+    })
+  });
+  response = await response.json()
+  const completion = response.choices[0].message.content;
+
+  return completion;
+};
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -48,9 +89,12 @@ export async function POST(request: NextRequest) {
 
     const chatEngine = await createChatEngine(llm);
 
+    let response_fireworks = ''
+    response_fireworks = await fireworks(userMessage.content)
+
     // Convert message content from Vercel/AI format to LlamaIndex/OpenAI format
     const userMessageContent = convertMessageContent(
-      userMessage.content,
+      userMessage.content + response_fireworks,
       data?.imageUrl,
     );
 

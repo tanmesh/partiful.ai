@@ -14,9 +14,15 @@ interface ChatMessageImageData {
   };
 }
 
+interface ChatMessageLinkData {
+  type: "link";
+  links: [string];
+}
+
 // This component will parse message data and render the appropriate UI.
 function ChatMessageData({ messageData }: { messageData: JSONValue }) {
   const { image_url, type } = messageData as unknown as ChatMessageImageData;
+  console.log('messageData', messageData);
   if (type === "image_url") {
     return (
       <div className="rounded-md max-w-[200px] shadow-md">
@@ -31,6 +37,22 @@ function ChatMessageData({ messageData }: { messageData: JSONValue }) {
       </div>
     );
   }
+  const { links } = messageData as unknown as ChatMessageLinkData;
+  if (type === "link") {
+    return (
+      <ul>
+        {links.map((link, index) => (
+          <a
+            key={index}
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'blue' }}>[{index + 1}] <span style={{ textDecoration: 'underline' }}>{link}</span>
+          </a>
+        ))}
+      </ul>
+    );
+  }
   return null;
 }
 
@@ -41,10 +63,10 @@ export default function ChatMessage(chatMessage: Message) {
       <ChatAvatar role={chatMessage.role} />
       <div className="group flex flex-1 justify-between gap-2">
         <div className="flex-1 space-y-4">
+          <Markdown content={chatMessage.content} />
           {chatMessage.data && (
             <ChatMessageData messageData={chatMessage.data} />
           )}
-          <Markdown content={chatMessage.content} />
         </div>
         <Button
           onClick={() => copyToClipboard(chatMessage.content)}

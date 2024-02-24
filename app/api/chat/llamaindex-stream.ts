@@ -17,6 +17,7 @@ function createParser(
   data: experimental_StreamData,
   opts?: ParserOptions,
 ) {
+  const links = new Set<string>();
   const it = res[Symbol.asyncIterator]();
   const trimStartOfStream = trimStartOfStreamHelper();
   return new ReadableStream<string>({
@@ -36,9 +37,15 @@ function createParser(
     },
     async pull(controller): Promise<void> {
       const { value, done } = await it.next();
+      if(value) {
+        links.add(value.sourceNodes[0].metadata.url);
+      }
       if (done) {
         controller.close();
-        data.append({}); // send an empty image response for the assistant's message
+        data.append({
+          type: "link",
+          links: Array.from(links),
+        }); // send an empty image response for the assistant's message
         data.close();
         return;
       }

@@ -4,6 +4,7 @@ import FileUploader from "../file-uploader";
 import { Input } from "../input";
 import UploadImagePreview from "../upload-image-preview";
 import { ChatHandler } from "./chat.interface";
+import Image from 'next/image';
 
 export default function ChatInput(
   props: Pick<
@@ -71,12 +72,13 @@ export default function ChatInput(
           value={props.input}
           onChange={props.handleInputChange}
         />
-        <FileUploader
+        {/* <FileUploader
           onFileUpload={handleUploadFile}
           onFileError={props.onFileError}
-        />
-        <Button type="submit" disabled={props.isLoading}>
-          Send message
+        /> */}
+        <Button type="submit" disabled={props.isLoading} className="gap-4">
+          <Image src='/send.png' alt="Send" width={20} height={20} />
+          Send
         </Button>
       </div>
     </form>
