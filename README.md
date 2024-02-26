@@ -1,19 +1,20 @@
-This is a [LlamaIndex](https://www.llamaindex.ai/) project using [Next.js](https://nextjs.org/) bootstrapped with [`create-llama`](https://github.com/run-llama/LlamaIndexTS/tree/main/packages/create-llama).
-
-## Getting Started
-
-First, install the dependencies:
-
+## Installing the dependencies - 
 ```
 npm install
 ```
 
-Second,
+## Scrapping new data -
+For this, firstly provide the link from where data needs to be scrapped. For this, add new link at './app/api/chat/engine/extract.mjs'
 ```
 node --experimental-modules ./app/api/chat/engine/extract.mjs
 ```
-Third, run the development server:
 
+## Generating index -
+```
+npm run generate
+```
+
+## Running the development server -
 ```
 npm run dev
 ```
